@@ -1,0 +1,252 @@
+<!doctype html><html lang=en dir=ltr>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=description content="TOWARDS FEDERATED LEARNING AT SCALE: SYSTEM DESIGN #  Paper link.
+This is a really nice comic about federated learning.
+FL focuses on synchronous approaches. This system enables one to train a deep neural network, using TensorFlow, on data stored on the phone which will never leave the device.
+Federated-learning protocol:
+Devices announce to the server that they are ready to run an FL task for a given FL population. An FL population is specified by a globally unique name which identifies the learning problem, or application, which is worked upon.">
+<meta name=theme-color content="#FFFFFF">
+<meta name=color-scheme content="light dark"><meta property="og:title" content="TF-Federated">
+<meta property="og:description" content="TOWARDS FEDERATED LEARNING AT SCALE: SYSTEM DESIGN #  Paper link.
+This is a really nice comic about federated learning.
+FL focuses on synchronous approaches. This system enables one to train a deep neural network, using TensorFlow, on data stored on the phone which will never leave the device.
+Federated-learning protocol:
+Devices announce to the server that they are ready to run an FL task for a given FL population. An FL population is specified by a globally unique name which identifies the learning problem, or application, which is worked upon.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://www.bodunhu.com/notes/docs/ml-system/papers/tf-federated/"><meta property="article:section" content="docs">
+<meta property="article:modified_time" content="2021-10-14T20:51:42-05:00">
+<title>TF-Federated | My Notes</title>
+<meta name=robots content="noindex, nofollow">
+<link rel=manifest href=/notes/manifest.json>
+<link rel=icon href=/notes/favicon.png type=image/x-icon>
+<link rel=stylesheet href=/notes/book.min.95d69eb6bad8b9707ff2b5d8d9e31ce70a1b84f2ed7ffaf665ffcf00aa7993bd.css integrity="sha256-ldaetrrYuXB/8rXY2eMc5wobhPLtf/r2Zf/PAKp5k70=" crossorigin=anonymous>
+<script defer src=/notes/flexsearch.min.js></script>
+<script defer src=/notes/en.search.min.05cec59d510fabf96b3cfd86688cb4725bcdb0f93b444023d1badcf988e03e1d.js integrity="sha256-Bc7FnVEPq/lrPP2GaIy0clvNsPk7REAj0brc+YjgPh0=" crossorigin=anonymous></script>
+</head>
+<body dir=ltr>
+<input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control>
+<main class="container flex">
+<aside class=book-menu>
+<div class=book-menu-content>
+<nav>
+<h2 class=book-brand>
+<a class="flex align-center" href=/notes/><span>My Notes</span>
+</a>
+</h2>
+<div class=book-search>
+<input type=text id=book-search-input placeholder=Search aria-label=Search maxlength=64 data-hotkeys=s/>
+<div class="book-search-spinner hidden"></div>
+<ul id=book-search-results></ul>
+</div>
+<ul class=book-languages>
+<li>
+<input type=checkbox id=languages class=toggle>
+<label for=languages class="flex justify-between">
+<a role=button class="flex align-center">
+<img src=/notes/svg/translate.svg class=book-icon alt=Languages>
+English
+</a>
+</label>
+<ul>
+<li>
+<a href=http://www.bodunhu.com/notes/zh/>
+Chinese
+</a>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class=book-section-flat>
+<span>Ml System</span>
+<ul>
+<li>
+<input type=checkbox id=section-b49da0609e6e940d576943fc081e834a class=toggle checked>
+<label for=section-b49da0609e6e940d576943fc081e834a class="flex justify-between">
+<a role=button>Papers</a>
+</label>
+<ul>
+<li>
+<a href=http://www.bodunhu.com/notes/docs/ml-system/papers/clipper/>Clipper</a>
+</li>
+<li>
+<a href=http://www.bodunhu.com/notes/docs/ml-system/papers/gandiva/>Gandiva</a>
+</li>
+<li>
+<a href=http://www.bodunhu.com/notes/docs/ml-system/papers/infaas/>INFaaS</a>
+</li>
+<li>
+<a href=http://www.bodunhu.com/notes/docs/ml-system/papers/pollux/>Pollux</a>
+</li>
+<li>
+<a href=http://www.bodunhu.com/notes/docs/ml-system/papers/tf-federated/ class=active>TF-Federated</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class=book-section-flat>
+<span>Serverless</span>
+<ul>
+<li>
+<input type=checkbox id=section-6e4200cb784b9597b0b276413cc89b3c class=toggle>
+<label for=section-6e4200cb784b9597b0b276413cc89b3c class="flex justify-between">
+<a role=button>Papers</a>
+</label>
+<ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+</div>
+</aside>
+<div class=book-page>
+<header class=book-header>
+<div class="flex align-center justify-between">
+<label for=menu-control>
+<img src=/notes/svg/menu.svg class=book-icon alt=Menu>
+</label>
+<strong>TF-Federated</strong>
+<label for=toc-control>
+<img src=/notes/svg/toc.svg class=book-icon alt="Table of Contents">
+</label>
+</div>
+<aside class="hidden clearfix">
+<nav id=TableOfContents>
+<ul>
+<li><a href=#towards-federated-learning-at-scale-system-design>TOWARDS FEDERATED LEARNING AT SCALE: SYSTEM DESIGN</a>
+<ul>
+<li><a href=#server>Server</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</aside>
+</header>
+<article class=markdown><h1 id=towards-federated-learning-at-scale-system-design>
+TOWARDS FEDERATED LEARNING AT SCALE: SYSTEM DESIGN
+<a class=anchor href=#towards-federated-learning-at-scale-system-design>#</a>
+</h1>
+<p>Paper <a href=https://arxiv.org/pdf/1902.01046.pdf>link</a>.</p>
+<p>This is a really nice <a href=https://federated.withgoogle.com/>comic</a> about federated learning.</p>
+<p>FL focuses on <em>synchronous</em> approaches. This system enables one to train a deep neural network, using TensorFlow, on data stored on the phone which will never leave the device.</p>
+<p>Federated-learning protocol:</p>
+<p><img src=https://raw.githubusercontent.com/BDHU/Page_pics/master/notes/tf-federated/fd-protocol.png alt=fd-protocol></p>
+<div class="book-columns flex flex-wrap">
+<div class="flex-even markdown-inner">
+Devices announce to the server that they are ready to run an FL task for a given FL population. An FL population is specified by a globally unique name which identifies the learning problem, or application, which is worked upon.
+</div>
+<div class="flex-even markdown-inner">
+<blockquote class="book-hint info">
+How often does devices communicate with servers for LF tasks?
+Does many FL populations affect server searching latency? KV store problem?
+</blockquote>
+</div>
+</div>
+<p>The server sends a FL plan (graph and execution instruction) and FL checkpoint (states) to devices. Devices only sends FL checkpoints back to servers.</p>
+<div class="book-columns flex flex-wrap">
+<div class="flex-even markdown-inner">
+During device selection phase, eligible devices (charing, unmetered network) periodically check in with server by opening a bidirectional channel. The channel is used for liveness and communication.
+</div>
+<div class="flex-even markdown-inner">
+<blockquote class="book-hint info">
+Is TCP used? Is it a suitable fit? Current implementation uses random sampling, which can be improved to address selection bias. Sampling seems to be performed on the server side. If a device has sensitive data, should the device handle most selection bias logic and only inform servers, as opposed to letting server handle selection bias?
+</blockquote>
+</div>
+</div>
+<blockquote class="book-hint warning">
+Since server only performs aggregation of models, could we accelerate aggregation on SmartNIC or programmable switches? Does model aggregation require complex matrix multiplication? Does batch make sense for aggregation?
+</blockquote>
+<div class="book-columns flex flex-wrap">
+<div class="flex-even markdown-inner">
+The server waits for the participating devices
+to report updates. As updates are received, the server aggregates them using Federated Averaging and instructs the
+reporting devices when to reconnect (see also Sec. 2.3). If
+enough devices report in time, the round will be success-
+fully completed and the server will update its global model,
+otherwise the round is abandoned.
+</div>
+<div class="flex-even markdown-inner">
+<blockquote class="book-hint info">
+Does round based updating make sense? If the server has to wait for all device participants for updates, this process is likely far slower than data-center training where you have thousands of GPUs connected together through high-bandwidth & low-latency networks. The advantage is obviously privacy. But could we use the bandwidth-to-hide-latency approach to compensate for distributed training by having far more devices?
+</blockquote>
+</div>
+</div>
+<div class="book-columns flex flex-wrap">
+<div class="flex-even markdown-inner">
+straggling devices which do not report
+back in time or do not react on configuration by the server
+will simply be ignored. The protocol has a certain tolerance
+for such drop-outs which is configurable per FL task.
+</div>
+<div class="flex-even markdown-inner">
+<blockquote class="book-hint info">
+How much does the drop-out threshold affect model accuracy? Could we dynamically adjust it depending on network condition?
+</blockquote>
+</div>
+</div>
+<h2 id=server>
+Server
+<a class=anchor href=#server>#</a>
+</h2>
+<p>Server rely on <em>actor</em> model.</p>
+<blockquote class="book-hint info">
+A different training & serving framework just for FL?
+</blockquote>
+<blockquote class="book-hint warning">
+Instances of actors placement policy. How long does a training instance usually last? Long or short?
+</blockquote>
+<p>Actors in FL Server arch:</p>
+<p><img src=https://raw.githubusercontent.com/BDHU/Page_pics/56db6b8d1352ec75fcede6cdd69994aee0dce4a4/notes/tf-federated/fl-actors.png alt=actor></p>
+<blockquote class="book-hint warning">
+Does all members need to participate in lockstep? Can we free them as soon as they finish their job? E.g. when selector finishes communicating with all devices, could we release them by using the fact that (possibly) each round takes a long time to train?
+</blockquote>
+<div class="book-columns flex flex-wrap">
+<div class="flex-even markdown-inner">
+An FL plan consists of two parts: one for the device and one
+for the server. The device portion of the FL plan contains,
+among other things: the TensorFlow graph itself, selection
+criteria for training data in the example store, instructions
+on how to batch data and how many epochs to run on the
+device, labels for the nodes in the graph which represent
+certain computations like loading and saving weights, and
+so on.
+</div>
+<div class="flex-even markdown-inner">
+<blockquote class="book-hint warning">
+Hyperparameter tuning, but on device. So we don&rsquo;t have luxury for large scale tuning.
+</blockquote>
+</div>
+</div>
+</article>
+<footer class=book-footer>
+<div class="flex flex-wrap justify-between">
+</div>
+<script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+</footer>
+<div class=book-comments>
+</div>
+<label for=menu-control class="hidden book-menu-overlay"></label>
+</div>
+<aside class=book-toc>
+<div class=book-toc-content>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#towards-federated-learning-at-scale-system-design>TOWARDS FEDERATED LEARNING AT SCALE: SYSTEM DESIGN</a>
+<ul>
+<li><a href=#server>Server</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</aside>
+</main>
+</body>
+</html>
